@@ -1,0 +1,9 @@
+{
+  "requiresEngine": ">=0.1.0",
+
+  "package": "com.example.polyphonexample.mixin",
+
+  "mixins": [
+    "MenuUpdateMixin"
+  ]
+}

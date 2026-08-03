@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>polyphon-example-mod</artifactId>
+    <version>1.0.0</version>
+
+    <!--
+      A minimal Songs of Syx CONTENT mod built on top of Polyphon.
+
+      It does NOT bundle the Polyphon engine: Polyphon is declared with 'provided' scope
+      (compile-time only). At runtime the engine comes from the Polyphon mod, which the player
+      has enabled in the launcher and which is already on the classpath. This mod ships only:
+        - its @Mixin classes (plain compiled classes),
+        - META-INF/polyphon.json listing them (so Polyphon discovers them at launch),
+        - the standard Songs of Syx mod folder (_Info.txt + V71/script/<Mod>.jar).
+    -->
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- The Polyphon API: annotations and runtime helpers only, never the engine. -->
+        <polyphon.version>0.1.0</polyphon.version>
+
+        <mod.name>PolyphonExample</mod.name>
+        <mod.version>${project.version}</mod.version>
+        <mod.description>Example mod demonstrating how to hook Songs of Syx through Polyphon. Requires Polyphon.</mod.description>
+        <mod.author>YourNameHere</mod.author>
+        <mod.info>Game V${game.version} | Mod Version ${project.version}</mod.info>
+
+        <!-- Must match the game version Polyphon is built for (the V71 script folder). -->
+        <game.version.major>71</game.version.major>
+        <game.version.minor>44</game.version.minor>
+        <game.version>${game.version.major}.${game.version.minor}</game.version>
+        <game.version.directory>V${game.version.major}</game.version.directory>
+
+        <mod.files.name>mod-files</mod.files.name>
+        <mod.install.directory>${game.mod.directory}/${mod.name}</mod.install.directory>
+        <mod.build.output.directory>${basedir}/target/out/${mod.name}</mod.build.output.directory>
+        <mod.files.build.output.directory>${mod.build.output.directory}/${game.version.directory}</mod.files.build.output.directory>
+        <mod.script.output.directory>${mod.files.build.output.directory}/script</mod.script.output.directory>
+        <mod.files.directory>${project.basedir}/src/main/resources/${mod.files.name}</mod.files.directory>
+
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    </properties>
+
+    <!-- Where the built mod is copied on `mvn install`, so you can test it in-game locally. -->
+    <profiles>
+        <profile>
+            <id>Windows</id>
+            <properties>
+                <game.mod.directory>${user.home}/AppData/Roaming/songsofsyx/mods</game.mod.directory>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>Linux</id>
+            <properties>
+                <game.mod.directory>${user.home}/.local/share/songsofsyx/mods</game.mod.directory>
+            </properties>
+            <activation>
+                <os><family>Linux</family></os>
+            </activation>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <!-- The Polyphon API (@Mixin, @Inject, ...). 'provided': compiled against, never bundled.
+             At runtime the classes come from the enabled Polyphon mod, which shades them in.
+             Note this is polyphon-API, not the engine: a consumer never needs the transformer,
+             the dispatcher or ASM on its compile classpath. -->
+        <dependency>
+            <groupId>io.github.vizardalpha</groupId>
+            <artifactId>polyphon-api</artifactId>
+            <version>${polyphon.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${mod.name}</finalName>
+
+        <resources>
+            <!-- Everything under src/main/resources EXCEPT mod-files/ goes into the jar.
+                 That is how META-INF/polyphon.json ends up inside PolyphonExample.jar, where
+                 Polyphon's classpath scan can find it. -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>${mod.files.name}/**</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+            </plugin>
+
+            <!-- Assembles the Songs of Syx mod folder layout under target/out/<Mod>:
+                   <Mod>/_Info.txt              (filtered: mod.* properties substituted)
+                   <Mod>/V71/script/<Mod>.jar   (the compiled mixins + mixins.txt)
+                 and, on `mvn install`, copies that folder into the game's mods directory. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-mod-info</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mod.build.output.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${mod.files.directory}</directory>
+                                    <includes>
+                                        <include>_Info.txt</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-mod-script-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mod.script.output.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>${project.build.finalName}.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-mod-to-game</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mod.install.directory}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${mod.build.output.directory}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
