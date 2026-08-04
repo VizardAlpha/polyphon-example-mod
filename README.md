@@ -7,7 +7,7 @@
 **A minimal Songs of Syx mod built on [Polyphon](https://polyphon-docs.vercel.app),** the shared
 mixin engine that lets any number of mods hook the same game method without conflicting.
 
-### [Read the documentation](https://polyphon-docs.vercel.app) · [Join the Discord](https://discord.gg/6n4EHkefVu)
+### [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3777203913) · [Documentation](https://polyphon-docs.vercel.app) · [Discord](https://discord.gg/6n4EHkefVu)
 
 </div>
 
@@ -43,7 +43,7 @@ annotation, shown once, compile-checked, pointed at **real methods verified agai
 
 1. **JDK 21** and **Maven**.
 2. **Polyphon in your local Maven repository**, as `io.github.vizardalpha:polyphon-api`.
-3. To run it in-game: **Songs of Syx** with the **Polyphon** mod installed and **enabled** in the
+3. To run it in-game: **Songs of Syx** with [**Polyphon**](https://steamcommunity.com/sharedfiles/filedetails/?id=3777203913) installed and **enabled** in the
    launcher. See [Install](https://polyphon-docs.vercel.app/guide/install).
 
 ## Build and install
