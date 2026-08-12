@@ -94,6 +94,7 @@ against songsofsyx 71.44**.
 | `mixin/MenuUpdateMixin` | [`@Inject(at = HEAD)`](https://polyphon-docs.vercel.app/reference/inject) | `menu.Menu.update(FD)V` |
 | `ReturnAndThrowMixin` | [`@Inject`](https://polyphon-docs.vercel.app/reference/inject) at RETURN / TAIL / THROW | `world.WorldGen.load(…)V` |
 | `CancellableInjectMixin` | [`@Inject(cancellable = true)`](https://polyphon-docs.vercel.app/helpers/cancellation) | `world.WORLD.IN_BOUNDS(II)Z` |
+| `OverwriteMixin` | [`@Overwrite`](https://polyphon-docs.vercel.app/reference/overwrite) (engine 0.2.0+) | `world.WORLD.IN_BOUNDS(II)Z` |
 | `TimingStateMixin` | [`State`](https://polyphon-docs.vercel.app/helpers/state) parameter | `world.WORLD.initBeforePlay()V` |
 | `ModifyReturnFertility*` | [`@ModifyReturn`](https://polyphon-docs.vercel.app/reference/modify-return) | `game.time.TIME.getFertility()D` |
 | `ModifyArgsMixin` | [`@ModifyArgs`](https://polyphon-docs.vercel.app/reference/modify-args) | `game.time.TIME.set(D)V` |

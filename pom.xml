@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- The Polyphon API: annotations and runtime helpers only, never the engine. -->
-        <polyphon.version>0.1.0</polyphon.version>
+        <polyphon.version>0.2.0</polyphon.version>
 
         <mod.name>PolyphonExample</mod.name>
         <mod.version>${project.version}</mod.version>
