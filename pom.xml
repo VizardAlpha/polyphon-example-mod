@@ -6,7 +6,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>polyphon-example-mod</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
     <!--
       A minimal Songs of Syx CONTENT mod built on top of Polyphon.
@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- The Polyphon API: annotations and runtime helpers only, never the engine. -->
-        <polyphon.version>0.2.0</polyphon.version>
+        <polyphon.version>0.3.0</polyphon.version>
 
         <mod.name>PolyphonExample</mod.name>
         <mod.version>${project.version}</mod.version>

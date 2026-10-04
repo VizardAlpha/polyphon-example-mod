@@ -1,6 +1,7 @@
 package com.example.polyphonexample;
 
 import vizardalpha.polyphon.api.ConsumerLog;
+import vizardalpha.polyphon.api.Polyphon;
 
 /**
  * The mod's own logic. Deliberately plain: it has no dependency on Songs of Syx, so it can be
@@ -13,6 +14,9 @@ import vizardalpha.polyphon.api.ConsumerLog;
  * <p>Logging goes through {@link ConsumerLog}, Polyphon's shared consumer logger: prefixed,
  * printf-style, never throws, WARN/ERROR on stderr; no hand-rolled prefixes, no logging framework
  * to ship. One instance per name, declared once.
+ *
+ * <p>{@link Polyphon} (engine 0.3.0+) answers what is running: the engine's version and the other
+ * mods built on it. This mod's own name is the {@code "id"} of its {@code META-INF/polyphon.json}.
  */
 public final class ExampleMod {
 
@@ -36,5 +40,13 @@ public final class ExampleMod {
         }
         greeted = true;
         LOG.info("Hello from a Polyphon mixin - the main menu is ticking!");
+        LOG.info("Polyphon %s, mods using it: %s", Polyphon.version(), Polyphon.loadedMods());
+
+        // An optional integration: only when the other mod is there, and without ever referencing
+        // its classes otherwise (they would not exist when it is not installed).
+        // polyphon-console declares no "id", so its jar name (PolyphonConsole.jar) stands in.
+        if (Polyphon.isLoaded("PolyphonConsole")) {
+            LOG.info("polyphon-console is installed too: our log lines show up in its overlay");
+        }
     }
 }

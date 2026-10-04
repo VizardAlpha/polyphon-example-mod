@@ -75,7 +75,9 @@ you'll see, in the game's log:
    `menu/Menu`.
 4. When the game loads `menu.Menu`, the agent transforms `update(float, double)` to call your
    handler at the very start of the method.
-5. Your handler calls `ExampleMod.onMenuTick()`, which prints the greeting once.
+5. Your handler calls `ExampleMod.onMenuTick()`, which prints the greeting once, then asks
+   `Polyphon` for the engine version and the other mods using it. The mod answers to the `"id"` of
+   its `polyphon.json` (`polyphon-example`) when another mod calls `Polyphon.isLoaded`.
 
 Because Polyphon **chains** handlers by priority instead of overwriting methods, other mods can hook
 the same method too, without any of you conflicting.
@@ -111,6 +113,7 @@ against songsofsyx 71.44**.
 | `MultiTargetMixin` | [`@Mixin(targets = …)`](https://polyphon-docs.vercel.app/reference/mixin) | `menu.Menu` + `view.main.VIEW` |
 | `RequireMixin` | [`require = true`](https://polyphon-docs.vercel.app/concepts/diagnostics) | `menu.Menu.update(FD)V` |
 | `RawTransformMixin` | [`PolyphonTransform`](https://polyphon-docs.vercel.app/reference/transform) | `game.GAME` |
+| `ExampleMod` (shipped, not a mixin) | [`Polyphon`](https://polyphon-docs.vercel.app/helpers/polyphon) (engine 0.3.0+) | runtime query: engine version, loaded mods, optional integration |
 
 ### Trying one in-game
 

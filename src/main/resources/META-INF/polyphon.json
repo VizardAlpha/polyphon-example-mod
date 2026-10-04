@@ -1,5 +1,7 @@
 {
-  "requiresEngine": ">=0.1.0",
+  "id": "polyphon-example",
+
+  "requiresEngine": ">=0.3.0",
 
   "package": "com.example.polyphonexample.mixin",
 
